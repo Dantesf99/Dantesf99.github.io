@@ -14,8 +14,8 @@
         "name": "Barpad",
         "price": 120,
         "images": {
-            "Röd": "renthalröd.jpg",
-            "Blå": "renthalblå.jpg"
+            "Röd": "renthalröd.webp",
+            "Blå": "renthalblå.webp"
         },
         "defaultColor": "Röd"
     },
@@ -34,8 +34,8 @@
         "name": "Fälgdekaler",
         "price": 120,
         "images": {
-            "Röd": "fälgdekalerröd.webp",
-            "Blå": "fälgdekalerblå.webp"
+            "Röd": "fälgdekalerröd.jpg",
+            "Blå": "fälgdekalerblå.jpg"
         },
         "defaultColor": "Röd"
     },
