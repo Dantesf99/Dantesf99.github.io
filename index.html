@@ -159,7 +159,6 @@
         button.active {
             background-color: #ffc107;
         }
-
     </style>
 </head>
 <body>
@@ -188,6 +187,7 @@
     <script>
         // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
+            console.log(`Changing color for product ${productId} to ${color}`); // Debugging
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
@@ -259,7 +259,8 @@
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
-            });
+            })
+            .catch(error => console.error('Error loading products:', error));
 
         window.onload = function() {
             updateCartCount();
