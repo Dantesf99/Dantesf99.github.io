@@ -1,0 +1,52 @@
+[
+    {
+        "id": "product1",
+        "name": "Domino Handtag",
+        "price": 149,
+        "images": {
+            "Röd": "dominoröd.webp",
+            "Blå": "dominoblå.webp"
+        },
+        "defaultColor": "Röd"
+    },
+    {
+        "id": "product2",
+        "name": "Barpad",
+        "price": 120,
+        "images": {
+            "Röd": "renthalröd.webp",
+            "Blå": "renthalblå.webp"
+        },
+        "defaultColor": "Röd"
+    },
+    {
+        "id": "product3",
+        "name": "Styrändar",
+        "price": 120,
+        "images": {
+            "Röd": "styrändröd.webp",
+            "Blå": "styrändblå.webp"
+        },
+        "defaultColor": "Röd"
+    },
+    {
+        "id": "product4",
+        "name": "Fälgdekaler",
+        "price": 120,
+        "images": {
+            "Röd": "fälgdekalerröd.webp",
+            "Blå": "fälgdekalerblå.webp"
+        },
+        "defaultColor": "Röd"
+    },
+    {
+        "id": "product5",
+        "name": "Stylingskruvkit",
+        "price": 120,
+        "images": {
+            "Röd": "stylingskruvröd.webp",
+            "Blå": "stylingskruvblå.webp"
+        },
+        "defaultColor": "Röd"
+    }
+]

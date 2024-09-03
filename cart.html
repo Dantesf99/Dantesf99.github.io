@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kundvagn - 50SHOP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .menu-icon {
+            position: absolute;
+            left: 20px;
+            top: 25.5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .menu {
+            display: none;
+            position: absolute;
+            left: 20px;
+            top: 55.5px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            display: block;
+            padding: 10px;
+        }
+
+        .menu a:hover {
+            background-color: #555;
+        }
+
+        header img {
+            max-height: 50px;
+            vertical-align: middle;
+        }
+
+        .back-button {
+            position: absolute;
+            right: 20px;
+            top: 27.5px;
+            color: #333;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #e0e0e0;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .back-button:hover {
+            background-color: #b0b0b0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .cart-items {
+            margin: 20px auto;
+            padding: 0 1.5cm;
+            box-sizing: border-box;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-items h3 {
+            padding: 10px;
+            border-bottom: 1px solid #ccc;
+            margin: 0;
+        }
+
+        .cart-items ul {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .cart-items ul li {
+            border-bottom: 1px solid #ccc;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .cart-items ul li:last-child {
+            border-bottom: none;
+        }
+
+        .cart-items .total {
+            padding: 10px;
+            font-weight: bold;
+        }
+
+        .remove-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .remove-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="menu" id="menu">
+            <a href="index.html">Butik</a>
+            <a href="cart.html">Kundvagn</a>
+        </div>
+        <button class="back-button" onclick="goBack()">Tillbaka</button>
+        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
+    </header>
+
+    <section id="cart">
+        <div class="section-header">
+            <h2>Din Kundvagn</h2>
+        </div>
+        <div class="cart-items" id="cart-items">
+            <h3>Innehåll:</h3>
+            <ul id="cart-list">
+                <!-- Cart items will be dynamically inserted here -->
+            </ul>
+            <div class="total">
+                Totalt: <span id="cart-total">0 kr</span>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            let menu = document.getElementById('menu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+
+        function updateCart() {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let cartList = document.getElementById('cart-list');
+            let cartTotal = document.getElementById('cart-total');
+            cartList.innerHTML = '';
+            let totalPrice = 0;
+
+            cart.forEach(item => {
+                let listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    ${item.name} (${item.color}) - ${item.price} kr x ${item.quantity}
+                    <button class="remove-button" onclick="removeFromCart('${item.name}', '${item.color}')">Ta bort</button>
+                `;
+                cartList.appendChild(listItem);
+                totalPrice += item.price * item.quantity;
+            });
+
+            cartTotal.textContent = `${totalPrice} kr`;
+        }
+
+        function removeFromCart(productName, color) {
+            let cart = JSON.parse(localStorage.getItem('cart')) || [];
+            let updatedCart = cart.map(item => {
+                if (item.name === productName && item.color === color) {
+                    item.quantity -= 1;
+                    if (item.quantity <= 0) {
+                        return null; // Mark for removal if quantity is 0 or less
+                    }
+                }
+                return item;
+            }).filter(item => item !== null); // Remove null items
+
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+            updateCart(); // Uppdatera vyn
+        }
+
+        window.onload = function() {
+            updateCart();
+        }
+    </script>
+</body>
+</html>
