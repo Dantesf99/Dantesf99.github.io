@@ -159,7 +159,6 @@
         button.active {
             background-color: #ffc107;
         }
-
     </style>
 </head>
 <body>
@@ -188,7 +187,7 @@
     <script>
         // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
-            const imgElement = document.querySelector(#${productId} .product-image);
+            const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
@@ -213,7 +212,7 @@
             localStorage.setItem('cart', JSON.stringify(cart));
 
             let button = document.getElementById(buttonId);
-            button.textContent = I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x;
+            button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x`;
             button.classList.add('active');
 
             updateCartCount();
@@ -243,7 +242,7 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    let productElement = 
+                    let productElement = `
                     <div class="product" id="${product.id}">
                         <div class="image-container">
                             <img src="${product.images[product.defaultColor]}" class="product-image">
@@ -252,14 +251,15 @@
                         <p>${product.price} kr</p>
                         <div class="color-selector">
                             ${Object.keys(product.images).map(color => 
-                            <div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>
+                            `<div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
                             ).join('')}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
-                    </div>;
+                    </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
-            });
+            })
+            .catch(error => console.error('Error loading products:', error));
 
         window.onload = function() {
             updateCartCount();
