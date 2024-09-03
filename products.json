@@ -14,8 +14,8 @@
         "name": "Barpad",
         "price": 120,
         "images": {
-            "Röd": "renthalröd.webp",
-            "Blå": "renthalblå.webp"
+            "Röd": "renthalröd.jpg",
+            "Blå": "renthalblå.jpg"
         },
         "defaultColor": "Röd"
     },
