@@ -106,6 +106,9 @@
             width: calc(25% - 20px);
             max-width: 300px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            height: 400px; /* Fixed height for consistency */
         }
 
         .product img {
@@ -115,9 +118,10 @@
         }
 
         .color-options {
-            margin-bottom: 10px;
+            margin-top: auto;
+            text-align: right;
+            padding: 10px;
             font-size: 14px;
-            text-align: center;
         }
 
         .color-option {
@@ -133,8 +137,8 @@
         }
 
         .color-option.selected {
-            border: 2px solid #333;
-            background-color: #fff;
+            border: none;
+            background-color: #333;
         }
 
         button {
@@ -144,7 +148,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 10px; /* Ensure consistent spacing */
+            margin-top: auto; /* Pushes the button to the bottom */
             width: 100%; /* Full width of the product container */
             border-radius: 50px; /* Rounded button */
         }
