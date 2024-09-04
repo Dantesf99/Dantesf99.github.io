@@ -185,69 +185,52 @@
     <header>
         <div class="menu-icon" onclick="toggleMenu()">☰</div>
         <div class="menu" id="menu">
-            <a href="index.html">Butik</a>
-            <a href="cart.html">Kundvagn</a>
+            <a href="index.html">Hem</a>
+            <a href="products.html">Produkter</a>
+            <a href="contact.html">Kontakt</a>
         </div>
-        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
-        <div class="cart-icon" onclick="goToCart()">
-            <span class="badge" id="cart-count">0</span>
+        <a href="index.html"><img src="logo.png" alt="50SHOP"></a>
+        <div class="cart-icon" onclick="viewCart()">
             🛒
+            <span class="badge" id="cart-count">0</span>
         </div>
     </header>
-    <section id="home">
-        <div class="section-header">
-            <h2>Våra produkter</h2>
-        </div>
-        <div class="product-list">
-            <!-- Produkter kommer att laddas här dynamiskt -->
-        </div>
-    </section>
+    <div class="section-header">
+        <h1>Produkter</h1>
+    </div>
+    <div class="product-list"></div>
     <script>
         function toggleMenu() {
-            let menu = document.getElementById('menu');
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+            const menu = document.getElementById('menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
         }
 
-        function changeColor(productId, imageName, buttonId) {
-            const imgElement = document.querySelector(`#${productId} .product-image`);
-            imgElement.src = imageName;
-
-            // Update color buttons
-            const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
-            colorOptions.forEach(option => option.classList.remove('selected'));
-
-            // Update button state
-            const button = document.getElementById(buttonId);
-            button.dataset.color = imageName.split('/').pop().split('.')[0]; // Extract color name from image filename
-            button.querySelector('.color-indicator').style.backgroundColor = button.dataset.color.toLowerCase();
-            button.textContent = `Köp - ${button.dataset.price} kr`;
-            button.classList.remove('active');
+        function viewCart() {
+            // Implement cart view functionality
         }
 
-        function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color;
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let existingProduct = cart.find(item => item.name === productName && item.color === color);
-            if (existingProduct) {
-                existingProduct.quantity += 1;
+        function changeColor(productId, imageUrl, buttonId) {
+            const productImage = document.querySelector(`#${productId} .product-image`);
+            productImage.src = imageUrl;
+            updateButtonState(productId, buttonId);
+        }
+
+        function handleAddToCart(productName, price, buttonId) {
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const productInCart = cart.find(item => item.name === productName);
+            if (productInCart) {
+                productInCart.quantity++;
             } else {
-                cart.push({ name: productName, color: color, price: productPrice, quantity: 1 });
+                cart.push({ name: productName, quantity: 1, price: price });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
-            let button = document.getElementById(buttonId);
-            button.querySelector('.color-indicator').style.backgroundColor = color.toLowerCase();
-            button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x - ${productPrice} kr`;
-            button.classList.add('active');
             updateCartCount();
-        }
-
-        function goToCart() {
-            window.location.href = "cart.html";
+            updateButtonState(productId, buttonId);
         }
 
         function updateCartCount() {
-            let cart = JSON.parse(localStorage.getItem('cart')) || [];
-            let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
             document.getElementById('cart-count').textContent = totalItems;
         }
 
@@ -271,10 +254,10 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    const imageSrc = product.images && typeof product.images === 'object' ? product.images[product.defaultColor] : 'default-image.jpg';
+                    const imageSrc = product.images && typeof product.images === 'object' ? product.images[product.defaultColor] : product.images;
                     let colorOptions = '';
 
-                    if (product.images && typeof product.images === 'object') {
+                    if (product.hasColors && product.images && typeof product.images === 'object') {
                         colorOptions = product.colors.map(color =>
                             `<div class="color-option ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-button')">
                                 <span>${color}</span>
