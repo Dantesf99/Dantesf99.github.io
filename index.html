@@ -128,10 +128,15 @@
             border-radius: 50%;
             width: 20px;
             height: 20px;
-            background-color: transparent;
             text-align: center;
             line-height: 20px;
             border: none; /* Remove border */
+        }
+        .color-option.red {
+            background-color: red;
+        }
+        .color-option.blue {
+            background-color: blue;
         }
         button {
             padding: 8px 16px;
@@ -142,12 +147,12 @@
             transition: background-color 0.3s;
             width: calc(100% - 20px); /* Slightly smaller than full width */
             border-radius: 50px; /* Rounded button */
-            position: absolute; /* Absolute positioning within the .product container */
-            bottom: 15px; /* Distance from the bottom */
-            left: 10px; /* Align with the left side, with some padding */
+            position: relative; /* Absolute positioning within the .product container */
+            bottom: 0; /* Align with the bottom */
             font-size: 14px; /* Smaller text size */
             text-align: center;
             box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            margin-top: auto; /* Pushes the button to the bottom */
         }
         button:hover {
             background-color: #218838;
@@ -183,25 +188,16 @@
             let menu = document.getElementById('menu');
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
-        function changeColor(productId, imageName, buttonId, color) {
+        function changeColor(productId, imageName, buttonId) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
-            // Update the color options' selected state
-            const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
-            colorOptions.forEach(option => {
-                option.classList.remove('selected');
-                if (option.textContent === color) {
-                    option.classList.add('selected');
-                }
-            });
             // Reset button state for the new color
             const button = document.getElementById(buttonId);
-            button.dataset.color = color;
-            button.textContent = `Lägg till i varukorg - ${button.dataset.price} kr`;
             button.classList.remove('active');
         }
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color;
+            const button = document.getElementById(buttonId);
+            const color = button.dataset.color;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
             if (existingProduct) {
@@ -210,7 +206,6 @@
                 cart.push({ name: productName, color: color, price: productPrice, quantity: 1 });
             }
             localStorage.setItem('cart', JSON.stringify(cart));
-            let button = document.getElementById(buttonId);
             button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x - ${productPrice} kr`;
             button.classList.add('active');
             updateCartCount();
@@ -240,12 +235,13 @@
             .then(response => response.json())
             .then(products => {
                 let productList = document.querySelector('.product-list');
+                productList.innerHTML = ''; // Clear existing products
                 products.forEach(product => {
                     let colorOptions = '';
                     if (product.images && typeof product.images === 'object') {
                         colorOptions = Object.keys(product.images)
                             .map(color =>
-                                `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
+                                `<span class="color-option ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')"></span>`
                             ).join(' ');
                     }
                     let productElement = `
@@ -255,9 +251,7 @@
                             ${colorOptions ? `<div class="color-options">${colorOptions}</div>` : ''}
                         </div>
                         <h3>${product.name}</h3>
-                        ${colorOptions ? '<div>' : ''}
-                            <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor || 'Default'}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg till i varukorg - ${product.price} kr</button>
-                        ${colorOptions ? '</div>' : ''}
+                        <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor || 'Default'}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg till i varukorg - ${product.price} kr</button>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
