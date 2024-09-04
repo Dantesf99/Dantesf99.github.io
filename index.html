@@ -102,9 +102,9 @@
         .product .image-container {
             position: relative;
             width: 100%;
-            padding-bottom: 100%; /* Maintains aspect ratio */
+            padding-bottom: 100%; /* Behåll proportionerna */
             overflow: hidden;
-            margin-bottom: 15px; /* Space for color options */
+            margin-bottom: 15px; /* Utrymme för färgval */
         }
         .product img {
             position: absolute;
@@ -112,15 +112,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Ensures the image covers the container */
+            object-fit: cover; /* Se till att bilden täcker behållaren */
         }
         .color-options {
             position: absolute;
             top: 10px;
             right: 10px;
             display: flex;
-            gap: 10px; /* Increased space between color options */
-            z-index: 10; /* Ensure color options appear above the image */
+            gap: 10px; /* Ökat avstånd mellan färgval */
+            z-index: 10; /* Se till att färgvalen ligger ovanpå bilden */
         }
         .color-option {
             display: inline-block;
@@ -128,13 +128,15 @@
             border-radius: 50%;
             width: 20px;
             height: 20px;
-            background-color: transparent; /* Remove default background */
-            border: 2px solid #ddd; /* Border to show color options */
+            background-color: transparent; /* Ta bort bakgrundsfärg */
+            border: 2px solid transparent; /* Ta bort kantlinje */
+            box-shadow: none; /* Ta bort skugga */
             text-align: center;
             line-height: 20px;
         }
         .color-option.selected {
-            border-color: #333; /* Highlight the selected color */
+            border-color: #333; /* Ljusare kantlinje för den valda färgen */
+            background-color: #fff; /* Bakgrundsfärg för den valda färgen */
         }
         button {
             padding: 8px 16px;
@@ -143,14 +145,14 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: calc(100% - 20px); /* Slightly smaller than full width */
-            border-radius: 50px; /* Rounded button */
-            position: absolute; /* Absolute positioning within the .product container */
-            bottom: 15px; /* Distance from the bottom */
-            left: 10px; /* Align with the left side, with some padding */
-            font-size: 14px; /* Smaller text size */
+            width: calc(100% - 20px); /* Lite mindre än full bredd */
+            border-radius: 50px; /* Rundad knapp */
+            position: absolute; /* Absolut positionering inom .product-behållaren */
+            bottom: 15px; /* Avstånd från botten */
+            left: 10px; /* Justera till vänster, med lite padding */
+            font-size: 14px; /* Mindre textstorlek */
             text-align: center;
-            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+            box-sizing: border-box; /* Inkludera padding och kantlinje i elementets totala bredd och höjd */
         }
         button:hover {
             background-color: #218838;
