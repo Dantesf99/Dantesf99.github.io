@@ -49,8 +49,18 @@
         },
         "defaultColor": "Röd"
     },
-    {
+        {
         "id": "product6",
+        "name": "Stylingskruvkit",
+        "price": 120,
+        "images": {
+            "Röd": "stylingskruvröd.webp",
+            "Blå": "srylingskruvblå.webp"
+        },
+        "defaultColor": "Röd"
+    },
+    {
+        "id": "product7",
         "name": "360 Reghållare",
         "price": 129,
         "images": "reg.webp"
