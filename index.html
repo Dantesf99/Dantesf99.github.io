@@ -179,9 +179,12 @@
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
 
+            // Reset button state when color changes
             const button = document.getElementById(buttonId);
-            const color = button.dataset.color || 'Röd';
-            updateButtonState(buttonId, button.dataset.productName, color);
+            button.dataset.color = button.dataset.color || 'Röd'; // Default to red if not set
+
+            button.textContent = 'Lägg i kundvagn';
+            button.classList.remove('active');
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
@@ -196,22 +199,12 @@
             }
 
             localStorage.setItem('cart', JSON.stringify(cart));
-            updateButtonState(buttonId, productName, color);
+
+            let button = document.getElementById(buttonId);
+            button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x`;
+            button.classList.add('active');
+
             updateCartCount();
-        }
-
-        function updateButtonState(buttonId, productName, color) {
-            const button = document.getElementById(buttonId);
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const product = cart.find(item => item.name === productName && item.color === color);
-
-            if (product) {
-                button.textContent = `I kundvagn: ${product.quantity}x`;
-                button.classList.add('active');
-            } else {
-                button.textContent = 'Lägg i kundvagn';
-                button.classList.remove('active');
-            }
         }
 
         function goToCart() {
@@ -250,6 +243,20 @@
                 });
             })
             .catch(error => console.error('Error loading products:', error));
+
+        function updateButtonState(buttonId, productName, color) {
+            const button = document.getElementById(buttonId);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const product = cart.find(item => item.name === productName && item.color === color);
+
+            if (product) {
+                button.textContent = `I kundvagn: ${product.quantity}x`;
+                button.classList.add('active');
+            } else {
+                button.textContent = 'Lägg i kundvagn';
+                button.classList.remove('active');
+            }
+        }
 
         window.onload = function() {
             updateCartCount();
