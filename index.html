@@ -161,8 +161,8 @@
             cursor: pointer;
             transition: background-color 0.3s;
             border-radius: 50px; /* Rounded button */
-            width: calc(100% - 20px); /* Slightly smaller than full width */
-            margin-top: auto; /* Pushes the button to the bottom */
+            width: 100%; /* Full width */
+            margin-top: 10px; /* Space from color options */
             font-size: 14px; /* Smaller text size */
             text-align: center;
             box-sizing: border-box; /* Include padding and border in the element's total width and height */
@@ -240,7 +240,7 @@
             const productInCart = cart.find(item => item.name === button.dataset.productName);
             if (productInCart) {
                 button.querySelector('.color-indicator').style.backgroundColor = button.dataset.color.toLowerCase();
-                button.textContent = `I kundvagn: ${productInCart.quantity}x - ${button.dataset.price} kr`;
+                button.textContent = `I kundvagn: ${productInCart.quantity}x`;
                 button.classList.add('active');
             } else {
                 button.querySelector('.color-indicator').style.backgroundColor = '';
@@ -257,7 +257,7 @@
                     const imageSrc = product.images && typeof product.images === 'object' ? product.images[product.defaultColor] : product.images;
                     let colorOptions = '';
 
-                    if (product.hasColors && product.images && typeof product.images === 'object') {
+                    if (product.colors && product.images && typeof product.images === 'object') {
                         colorOptions = product.colors.map(color =>
                             `<div class="color-option ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-button')">
                                 <span>${color}</span>
@@ -274,7 +274,7 @@
                             <h3>${product.name}</h3>
                             <button id="${product.id}-button" data-product-name="${product.name}" data-price="${product.price}" class="buy-button" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-button')">
                                 <div class="color-indicator"></div>
-                                Köp - ${product.price} kr
+                                Köp
                             </button>
                         </div>
                     `;
