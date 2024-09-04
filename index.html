@@ -110,12 +110,18 @@
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             position: relative;
+            overflow: hidden;
         }
 
         .product img {
             max-width: 100%;
             height: auto;
             display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .product:hover img {
+            transform: scale(1.05);
         }
 
         .product .color-selector {
@@ -132,6 +138,7 @@
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid #fff;
+            transition: border-color 0.3s ease;
         }
 
         .product .color-selector .color-circle.red {
@@ -142,17 +149,22 @@
             background-color: blue;
         }
 
+        .product .color-selector .color-circle:hover {
+            border-color: #000;
+        }
+
         button {
             padding: 8px 16px;
             background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         button:hover {
             background-color: #218838;
+            transform: scale(1.05);
         }
 
         button.active {
@@ -178,32 +190,55 @@
         <div class="section-header">
             <h2>Våra produkter</h2>
         </div>
-        <div class="product-list">
-            <!-- Sample Products -->
-            <div class="product" id="product1">
-                <div class="image-container">
-                    <img src="dominoröd.webp" class="product-image">
-                </div>
-                <h3>Domino Handtag Röd, Blå</h3>
-                <p>130 kr</p>
-                <div class="color-selector">
-                    <div class="color-circle red" onclick="changeColor('product1', 'dominoröd.webp', 'domino-btn', 'Röd')"></div>
-                    <div class="color-circle blue" onclick="changeColor('product1', 'dominoblå.webp', 'domino-btn', 'Blå')"></div>
-                </div>
-                <button id="domino-btn" onclick="handleAddToCart('Domino Handtag', 130, 'domino-btn')">Lägg i kundvagn</button>
-            </div>
-            <!-- Repeat similar blocks for other products -->
+        <div class="product-list" id="product-list">
+            <!-- Products will be dynamically added here -->
         </div>
     </section>
 
     <script>
+        async function loadProducts() {
+            try {
+                const response = await fetch('products.json');
+                const products = await response.json();
+                const productList = document.getElementById('product-list');
+
+                products.forEach(product => {
+                    const productDiv = document.createElement('div');
+                    productDiv.className = 'product';
+                    productDiv.id = product.id;
+
+                    let colorCircles = '';
+                    Object.keys(product.images).forEach(color => {
+                        colorCircles += `
+                            <div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>
+                        `;
+                    });
+
+                    productDiv.innerHTML = `
+                        <div class="image-container">
+                            <img src="${product.images['Röd']}" class="product-image">
+                        </div>
+                        <h3>${product.name} Röd, Blå</h3>
+                        <p>${product.price} kr</p>
+                        <div class="color-selector">
+                            ${colorCircles}
+                        </div>
+                        <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
+                    `;
+
+                    productList.appendChild(productDiv);
+                });
+            } catch (error) {
+                console.error('Error loading products:', error);
+            }
+        }
+
         function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
 
-            // Reset button text to "Lägg i kundvagn"
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
         }
@@ -245,6 +280,7 @@
 
         window.onload = function() {
             updateCartCount();
+            loadProducts(); // Load products when the page is loaded
         }
     </script>
 </body>
