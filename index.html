@@ -102,9 +102,9 @@
         .product .image-container {
             position: relative;
             width: 100%;
-            padding-bottom: 100%; /* Behåll proportionerna */
+            padding-bottom: 100%; /* Maintains aspect ratio */
             overflow: hidden;
-            margin-bottom: 15px; /* Utrymme för färgval */
+            margin-bottom: 10px; /* Space for color options and button */
         }
         .product img {
             position: absolute;
@@ -112,15 +112,15 @@
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Se till att bilden täcker behållaren */
+            object-fit: cover; /* Ensures the image covers the container */
         }
         .color-options {
             position: absolute;
             top: 10px;
             right: 10px;
             display: flex;
-            gap: 10px; /* Ökat avstånd mellan färgval */
-            z-index: 10; /* Se till att färgvalen ligger ovanpå bilden */
+            gap: 5px; /* Space between color options */
+            z-index: 10; /* Ensure color options appear above the image */
         }
         .color-option {
             display: inline-block;
@@ -128,12 +128,10 @@
             border-radius: 50%;
             width: 20px;
             height: 20px;
-            background-color: transparent; /* Ingen bakgrundsfärg */
+            background-color: transparent;
             text-align: center;
             line-height: 20px;
-            border: none; /* Ingen kantlinje */
-            box-shadow: none; /* Ingen skugga */
-            font-size: 14px; /* Textstorlek */
+            border: none; /* Remove border */
         }
         button {
             padding: 8px 16px;
@@ -142,12 +140,14 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: calc(100% - 20px); /* Lite mindre än full bredd */
-            border-radius: 50px; /* Rundad knapp */
-            font-size: 14px; /* Mindre textstorlek */
+            width: calc(100% - 20px); /* Slightly smaller than full width */
+            border-radius: 50px; /* Rounded button */
+            position: absolute; /* Absolute positioning within the .product container */
+            bottom: 15px; /* Distance from the bottom */
+            left: 10px; /* Align with the left side, with some padding */
+            font-size: 14px; /* Smaller text size */
             text-align: center;
-            box-sizing: border-box; /* Inkludera padding och kantlinje i elementets totala bredd och höjd */
-            margin-top: 10px; /* Justerat utrymme ovanför knappen */
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
         button:hover {
             background-color: #218838;
@@ -186,8 +186,15 @@
         function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
-
-            // Uppdatera knappen
+            // Update the color options' selected state
+            const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
+            colorOptions.forEach(option => {
+                option.classList.remove('selected');
+                if (option.textContent === color) {
+                    option.classList.add('selected');
+                }
+            });
+            // Reset button state for the new color
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
             button.textContent = `Lägg till i varukorg - ${button.dataset.price} kr`;
@@ -234,11 +241,13 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    let colorOptions = product.images && typeof product.images === 'object'
-                        ? Object.keys(product.images).map(color =>
-                            `<span class="color-option" data-color="${color}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
-                        ).join(' ')
-                        : '';
+                    let colorOptions = '';
+                    if (product.images && typeof product.images === 'object') {
+                        colorOptions = Object.keys(product.images)
+                            .map(color =>
+                                `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
+                            ).join(' ');
+                    }
                     let productElement = `
                     <div class="product" id="${product.id}">
                         <div class="image-container">
@@ -246,11 +255,13 @@
                             ${colorOptions ? `<div class="color-options">${colorOptions}</div>` : ''}
                         </div>
                         <h3>${product.name}</h3>
-                        <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg till i varukorg - ${product.price} kr</button>
+                        ${colorOptions ? '<div>' : ''}
+                            <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor || 'Default'}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg till i varukorg - ${product.price} kr</button>
+                        ${colorOptions ? '</div>' : ''}
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
-                // Uppdatera knappen tillstånd för alla produkter
+                // Update button state for all products
                 products.forEach(product => updateButtonState(product.id, `${product.id}-btn`));
             })
             .catch(error => console.error('Error loading products:', error));
