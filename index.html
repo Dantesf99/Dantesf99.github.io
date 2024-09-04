@@ -179,12 +179,13 @@
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
 
-            // Reset button state when color changes
+            // Reset button state for the new color
             const button = document.getElementById(buttonId);
             button.dataset.color = button.dataset.color || 'Röd'; // Default to red if not set
-
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
+
+            updateButtonState(productId, buttonId);
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
@@ -217,6 +218,21 @@
             document.getElementById('cart-count').textContent = totalItems;
         }
 
+        function updateButtonState(productId, buttonId) {
+            const button = document.getElementById(buttonId);
+            const color = button.dataset.color || 'Röd';
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const product = cart.find(item => item.name === button.dataset.productName && item.color === color);
+
+            if (product) {
+                button.textContent = `I kundvagn: ${product.quantity}x`;
+                button.classList.add('active');
+            } else {
+                button.textContent = 'Lägg i kundvagn';
+                button.classList.remove('active');
+            }
+        }
+
         fetch('products.json')
             .then(response => response.json())
             .then(products => {
@@ -239,24 +255,10 @@
                         <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
-                    updateButtonState(`${product.id}-btn`, product.name, product.defaultColor);
+                    updateButtonState(product.id, `${product.id}-btn`);
                 });
             })
             .catch(error => console.error('Error loading products:', error));
-
-        function updateButtonState(buttonId, productName, color) {
-            const button = document.getElementById(buttonId);
-            const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const product = cart.find(item => item.name === productName && item.color === color);
-
-            if (product) {
-                button.textContent = `I kundvagn: ${product.quantity}x`;
-                button.classList.add('active');
-            } else {
-                button.textContent = 'Lägg i kundvagn';
-                button.classList.remove('active');
-            }
-        }
 
         window.onload = function() {
             updateCartCount();
