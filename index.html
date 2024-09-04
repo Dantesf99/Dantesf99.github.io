@@ -16,26 +16,36 @@
         header {
             background-color: #333;
             color: white;
-            padding: 10px 20px;
-            position: -webkit-sticky; /* För Safari */
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 20px;
+            text-align: center;
+            position: relative;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
+        .menu-icon {
+            position: absolute;
+            left: 20px;
+            top: 25.5px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
         .menu {
-            display: flex;
-            gap: 20px;
+            display: none;
+            position: absolute;
+            left: 20px;
+            top: 55.5px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
         }
 
         .menu a {
             color: white;
             text-decoration: none;
+            display: block;
             padding: 10px;
         }
 
@@ -44,17 +54,17 @@
         }
 
         header img {
-            max-height: 40px;
-            margin: 0;
+            max-height: 50px;
+            vertical-align: middle;
         }
 
         .cart-icon {
+            position: absolute;
+            right: 20px;
+            top: 27.5px;
             color: white;
             font-size: 24px;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            position: relative;
         }
 
         .cart-icon .badge {
@@ -77,11 +87,16 @@
         }
 
         .product-list {
+            margin: 20px auto;
+            padding: 0 1.5cm;
+            box-sizing: border-box;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 0 2rem;
-            box-sizing: border-box;
         }
 
         .product {
@@ -92,8 +107,8 @@
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             position: relative;
-            width: calc(25% - 20px); /* Anpassa bredden till 25% av containern */
-            max-width: 300px; /* Begränsa bredden för att passa på stora skärmar */
+            width: calc(25% - 20px);
+            max-width: 300px;
             text-align: center;
         }
 
@@ -147,11 +162,12 @@
 </head>
 <body>
     <header>
-        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
-        <div class="menu">
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="menu" id="menu">
             <a href="index.html">Butik</a>
             <a href="cart.html">Kundvagn</a>
         </div>
+        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
         <div class="cart-icon" onclick="goToCart()">
             <span class="badge" id="cart-count">0</span>
             🛒
@@ -168,6 +184,11 @@
     </section>
 
     <script>
+        function toggleMenu() {
+            let menu = document.getElementById('menu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
         // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
