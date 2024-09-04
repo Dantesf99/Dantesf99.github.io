@@ -218,20 +218,20 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    let colorOptions = Object.keys(product.images).map(color => 
-                        `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')">${color}</span>`
-                    ).join(' ');
+                    let colorOptions = product.images && typeof product.images === 'object' 
+                        ? Object.keys(product.images).map(color => 
+                            `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')">${color}</span>`
+                        ).join(' ')
+                        : '';
 
                     let productElement = `
                     <div class="product" id="${product.id}">
                         <div class="image-container">
-                            <img src="${product.images[product.defaultColor]}" class="product-image">
+                            <img src="${product.images && typeof product.images === 'object' ? product.images[product.defaultColor] : product.images}" class="product-image">
                         </div>
                         <h3>${product.name}</h3>
                         <p>${product.price} kr</p>
-                        <div class="color-options">
-                            ${colorOptions}
-                        </div>
+                        ${colorOptions ? `<div class="color-options">${colorOptions}</div>` : ''}
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
