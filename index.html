@@ -25,7 +25,7 @@
         .menu-icon {
             position: absolute;
             left: 20px;
-            top: 25.5px;
+            top: 25px;
             color: white;
             font-size: 24px;
             cursor: pointer;
@@ -35,7 +35,7 @@
             display: none;
             position: absolute;
             left: 20px;
-            top: 55.5px;
+            top: 55px;
             background-color: #333;
             padding: 10px;
             border-radius: 5px;
@@ -61,7 +61,7 @@
         .cart-icon {
             position: absolute;
             right: 20px;
-            top: 27.5px;
+            top: 25px;
             color: white;
             font-size: 24px;
             cursor: pointer;
@@ -90,9 +90,6 @@
             margin: 20px auto;
             padding: 0 1.5cm;
             box-sizing: border-box;
-            /* Ta bort bakgrundsfärg och border här */
-            background-color: transparent; 
-            border: none;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -117,29 +114,16 @@
             display: block;
         }
 
-        .product .color-selector {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            display: flex;
-            gap: 5px;
+        .color-options {
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-align: center;
         }
 
-        .product .color-selector .color-circle {
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+        .color-option {
+            display: inline-block;
+            margin: 0 5px;
             cursor: pointer;
-            border: 2px solid #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-        }
-
-        .product .color-selector .color-circle.red {
-            background-color: red;
-        }
-
-        .product .color-selector .color-circle.blue {
-            background-color: blue;
         }
 
         button {
@@ -189,11 +173,11 @@
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
-        function changeColor(productId, imageName, buttonId, color) {
+        function changeColor(productId, imageName, buttonId) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
-            button.dataset.color = color;
+            button.dataset.color = button.dataset.color || 'Röd';
 
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
@@ -234,6 +218,10 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
+                    let colorOptions = Object.keys(product.images).map(color => 
+                        `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')">${color}</span>`
+                    ).join(' ');
+
                     let productElement = `
                     <div class="product" id="${product.id}">
                         <div class="image-container">
@@ -241,10 +229,8 @@
                         </div>
                         <h3>${product.name}</h3>
                         <p>${product.price} kr</p>
-                        <div class="color-selector">
-                            ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle" style="background-color: ${color.toLowerCase()};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
-                            ).join('')}
+                        <div class="color-options">
+                            ${colorOptions}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
                     </div>`;
