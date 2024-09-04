@@ -5,37 +5,51 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>50SHOP</title>
     <style>
+        /* Din CSS här */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            box-sizing: border-box;
         }
 
         header {
             background-color: #333;
             color: white;
-            padding: 10px 20px;
+            padding: 20px;
+            text-align: center;
             position: -webkit-sticky; /* För Safari */
             position: sticky;
             top: 0;
             z-index: 1000;
             width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* För lite skugga nedanför headern */
+        }
+
+        .menu-icon {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
         }
 
         .menu {
-            display: flex;
-            gap: 20px;
+            display: none;
+            position: absolute;
+            left: 20px;
+            top: 55px;
+            background-color: #333;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1000;
         }
 
         .menu a {
             color: white;
             text-decoration: none;
+            display: block;
             padding: 10px;
         }
 
@@ -44,17 +58,19 @@
         }
 
         header img {
-            max-height: 40px;
-            margin: 0;
+            max-height: 50px;
+            vertical-align: middle;
         }
 
         .cart-icon {
+            position: absolute;
+            right: 50px;
+            top: 25px;
             color: white;
             font-size: 24px;
             cursor: pointer;
             display: flex;
             align-items: center;
-            position: relative;
         }
 
         .cart-icon .badge {
@@ -65,7 +81,7 @@
             font-size: 14px;
             position: absolute;
             top: -8px;
-            right: -10px;
+            left: -10px;
             height: 20px;
             line-height: 20px;
             text-align: center;
@@ -79,8 +95,9 @@
         .product-list {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            padding: 0 2rem;
+            justify-content: space-between;
+            margin: 0 auto;
+            padding: 0 1.5cm;
             box-sizing: border-box;
         }
 
@@ -88,13 +105,12 @@
             background-color: white;
             border: 1px solid #ccc;
             padding: 15px;
-            margin: 10px;
+            width: calc(25% - 20px);
+            text-align: center;
+            margin-bottom: 20px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             position: relative;
-            width: calc(25% - 20px); /* Anpassa bredden till 25% av containern */
-            max-width: 300px; /* Begränsa bredden för att passa på stora skärmar */
-            text-align: center;
         }
 
         .product img {
@@ -143,15 +159,17 @@
         button.active {
             background-color: #ffc107;
         }
+
     </style>
 </head>
 <body>
     <header>
-        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
-        <div class="menu">
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="menu" id="menu">
             <a href="index.html">Butik</a>
             <a href="cart.html">Kundvagn</a>
         </div>
+        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
         <div class="cart-icon" onclick="goToCart()">
             <span class="badge" id="cart-count">0</span>
             🛒
@@ -170,7 +188,7 @@
     <script>
         // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
-            const imgElement = document.querySelector(`#${productId} .product-image`);
+            const imgElement = document.querySelector(#${productId} .product-image);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
@@ -195,7 +213,7 @@
             localStorage.setItem('cart', JSON.stringify(cart));
 
             let button = document.getElementById(buttonId);
-            button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x`;
+            button.textContent = I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x;
             button.classList.add('active');
 
             updateCartCount();
@@ -204,6 +222,12 @@
         // Funktion för att navigera till kundvagnen
         function goToCart() {
             window.location.href = "cart.html";
+        }
+
+        // Funktion för att visa/dölja menyn
+        function toggleMenu() {
+            let menu = document.getElementById('menu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
         // Funktion för att uppdatera antalet produkter i kundvagnen
@@ -219,7 +243,7 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    let productElement = `
+                    let productElement = 
                     <div class="product" id="${product.id}">
                         <div class="image-container">
                             <img src="${product.images[product.defaultColor]}" class="product-image">
@@ -228,15 +252,14 @@
                         <p>${product.price} kr</p>
                         <div class="color-selector">
                             ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
+                            <div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>
                             ).join('')}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
-                    </div>`;
+                    </div>;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
-            })
-            .catch(error => console.error('Error loading products:', error));
+            });
 
         window.onload = function() {
             updateCartCount();
