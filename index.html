@@ -133,9 +133,7 @@
             line-height: 20px;
             border: none; /* Ingen kantlinje */
             box-shadow: none; /* Ingen skugga */
-        }
-        .color-option.selected {
-            font-weight: bold; /* Markerar vald färg med fet stil */
+            font-size: 14px; /* Textstorlek */
         }
         button {
             padding: 8px 16px;
@@ -189,16 +187,7 @@
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
 
-            // Update the color options' selected state
-            const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
-            colorOptions.forEach(option => {
-                option.classList.remove('selected');
-                if (option.dataset.color === color) {
-                    option.classList.add('selected');
-                }
-            });
-
-            // Reset button state for the new color
+            // Uppdatera knappen
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
             button.textContent = `Lägg till i varukorg - ${button.dataset.price} kr`;
@@ -247,7 +236,7 @@
                 products.forEach(product => {
                     let colorOptions = product.images && typeof product.images === 'object'
                         ? Object.keys(product.images).map(color =>
-                            `<span class="color-option ${color === product.defaultColor ? 'selected' : ''}" data-color="${color}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
+                            `<span class="color-option" data-color="${color}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
                         ).join(' ')
                         : '';
                     let productElement = `
@@ -258,7 +247,6 @@
                         </div>
                         <h3>${product.name}</h3>
                         <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg till i varukorg - ${product.price} kr</button>
-                        <p>${product.price} kr</p>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
