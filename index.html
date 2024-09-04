@@ -10,7 +10,6 @@
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
-            box-sizing: border-box;
         }
 
         header {
@@ -18,14 +17,18 @@
             color: white;
             padding: 20px;
             text-align: center;
-            position: relative;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            position: -webkit-sticky; /* För Safari */
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* För lite skugga nedanför headern */
         }
 
         .menu-icon {
             position: absolute;
             left: 20px;
-            top: 25.5px;
+            top: 25px;
             color: white;
             font-size: 24px;
             cursor: pointer;
@@ -35,7 +38,7 @@
             display: none;
             position: absolute;
             left: 20px;
-            top: 55.5px;
+            top: 55px;
             background-color: #333;
             padding: 10px;
             border-radius: 5px;
@@ -61,10 +64,12 @@
         .cart-icon {
             position: absolute;
             right: 20px;
-            top: 27.5px;
+            top: 25px;
             color: white;
             font-size: 24px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
         }
 
         .cart-icon .badge {
@@ -75,7 +80,7 @@
             font-size: 14px;
             position: absolute;
             top: -8px;
-            right: -10px;
+            left: -10px;
             height: 20px;
             line-height: 20px;
             text-align: center;
@@ -87,25 +92,24 @@
         }
 
         .product-list {
-            margin: 20px auto;
-            padding: 0 1.5cm;
-            box-sizing: border-box;
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: space-between;
+            margin: 0 auto;
+            padding: 0 1.5cm;
+            box-sizing: border-box;
         }
 
         .product {
             background-color: white;
             border: 1px solid #ccc;
             padding: 15px;
-            margin: 10px;
+            width: calc(25% - 20px);
+            text-align: center;
+            margin-bottom: 20px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             position: relative;
-            width: calc(25% - 20px);
-            max-width: 300px;
-            text-align: center;
         }
 
         .product img {
@@ -128,8 +132,6 @@
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-            display: inline-block;
         }
 
         .product .color-selector .color-circle.red {
@@ -177,29 +179,37 @@
             <h2>Våra produkter</h2>
         </div>
         <div class="product-list">
-            <!-- Produkter kommer att laddas här dynamiskt -->
+            <!-- Sample Products -->
+            <div class="product" id="product1">
+                <div class="image-container">
+                    <img src="dominoröd.webp" class="product-image">
+                </div>
+                <h3>Domino Handtag Röd, Blå</h3>
+                <p>130 kr</p>
+                <div class="color-selector">
+                    <div class="color-circle red" onclick="changeColor('product1', 'dominoröd.webp', 'domino-btn', 'Röd')"></div>
+                    <div class="color-circle blue" onclick="changeColor('product1', 'dominoblå.webp', 'domino-btn', 'Blå')"></div>
+                </div>
+                <button id="domino-btn" onclick="handleAddToCart('Domino Handtag', 130, 'domino-btn')">Lägg i kundvagn</button>
+            </div>
+            <!-- Repeat similar blocks for other products -->
         </div>
     </section>
 
     <script>
-        function toggleMenu() {
-            let menu = document.getElementById('menu');
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
-        }
-
         function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
 
-            // Update button text and remove active class
+            // Reset button text to "Lägg i kundvagn"
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Standard till 'Röd' om ingen färg är satt
+            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Default to 'Röd' if no color is set
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
@@ -222,35 +232,16 @@
             window.location.href = "cart.html";
         }
 
+        function toggleMenu() {
+            let menu = document.getElementById('menu');
+            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
+        }
+
         function updateCartCount() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').textContent = totalItems;
         }
-
-        fetch('products.json')
-            .then(response => response.json())
-            .then(products => {
-                let productList = document.querySelector('.product-list');
-                products.forEach(product => {
-                    let productElement = `
-                    <div class="product" id="${product.id}">
-                        <div class="image-container">
-                            <img src="${product.images[product.defaultColor]}" class="product-image">
-                        </div>
-                        <h3>${product.name}</h3>
-                        <p>${product.price} kr</p>
-                        <div class="color-selector">
-                            ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle ${color.toLowerCase()}" style="background-color: ${color.toLowerCase()};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
-                            ).join('')}
-                        </div>
-                        <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
-                    </div>`;
-                    productList.insertAdjacentHTML('beforeend', productElement);
-                });
-            })
-            .catch(error => console.error('Error loading products:', error));
 
         window.onload = function() {
             updateCartCount();
