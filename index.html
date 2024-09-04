@@ -118,14 +118,25 @@
             display: flex;
             gap: 5px; /* Space between color options */
             margin-bottom: 10px; /* Space between color options and button */
+            position: absolute;
+            top: 70px; /* Position the color options below the image */
+            left: 0;
+            width: 100%;
+            justify-content: center; /* Center align color options */
         }
         .color-option {
-            display: none; /* Default to hidden */
+            display: flex;
             justify-content: center;
             align-items: center;
             font-size: 12px; /* Font size for text */
             color: white;
             text-align: center;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 30px; /* Adjust size for visibility */
+            height: 30px;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.2); /* Subtle shadow for better visibility */
+            transition: box-shadow 0.3s;
         }
         .color-option.red {
             background-color: red;
@@ -135,18 +146,6 @@
         }
         .color-option span {
             display: block;
-        }
-        .color-option.selected {
-            border: none; /* Remove border for selected option */
-        }
-        .color-option {
-            display: flex; /* Use flexbox for text centering */
-            cursor: pointer;
-            border-radius: 50%;
-            width: 30px; /* Adjust size for visibility */
-            height: 30px;
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.2); /* Subtle shadow for better visibility */
-            transition: box-shadow 0.3s;
         }
         .color-option:hover {
             box-shadow: 0 0 0 4px rgba(0,0,0,0.4); /* Enhanced shadow on hover */
@@ -264,7 +263,7 @@
                     let colorOptions = '';
 
                     if (product.images && typeof product.images === 'object') {
-                        colorOptions = Object.keys(product.images).map(color =>
+                        colorOptions = product.colors.map(color =>
                             `<div class="color-option ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-button')">
                                 <span>${color}</span>
                             </div>`
