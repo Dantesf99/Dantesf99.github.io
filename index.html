@@ -124,6 +124,17 @@
             display: inline-block;
             margin: 0 5px;
             cursor: pointer;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: #ddd;
+            text-align: center;
+            line-height: 20px;
+        }
+
+        .color-option.selected {
+            border: 2px solid #333;
+            background-color: #fff;
         }
 
         button {
@@ -135,6 +146,7 @@
             transition: background-color 0.3s;
             margin-top: 10px; /* Ensure consistent spacing */
             width: 100%; /* Full width of the product container */
+            border-radius: 50px; /* Rounded button */
         }
 
         button:hover {
@@ -175,21 +187,27 @@
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
-        function changeColor(productId, imageName, buttonId) {
+        function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
 
+            const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
+            colorOptions.forEach(option => {
+                option.classList.remove('selected');
+                if (option.textContent === color) {
+                    option.classList.add('selected');
+                }
+            });
+
             // Reset button state for the new color
             const button = document.getElementById(buttonId);
-            button.dataset.color = button.dataset.color || 'Röd'; // Default to red if not set
+            button.dataset.color = color;
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
-
-            updateButtonState(productId, buttonId);
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color || 'Röd';
+            const color = document.getElementById(buttonId).dataset.color;
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
@@ -220,7 +238,7 @@
 
         function updateButtonState(productId, buttonId) {
             const button = document.getElementById(buttonId);
-            const color = button.dataset.color || 'Röd';
+            const color = button.dataset.color;
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
             const product = cart.find(item => item.name === button.dataset.productName && item.color === color);
 
@@ -240,7 +258,7 @@
                 products.forEach(product => {
                     let colorOptions = product.images && typeof product.images === 'object'
                         ? Object.keys(product.images).map(color =>
-                            `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')">${color}</span>`
+                            `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
                         ).join(' ')
                         : '';
 
