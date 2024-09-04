@@ -53,12 +53,16 @@
         "id": "product7",
         "name": "360 Reghållare",
         "price": 129,
-        "images": "reg.webp"
+        "images": {
+            "Default": "reg.webp"
+        }
     },
     {
         "id": "product8",
         "name": "Underliggande Backspegel 2x",
         "price": 149,
-        "images": "backspegel.webp"
+        "images": {
+            "Default": "backspegel.webp"
+        }
     }
 ]
