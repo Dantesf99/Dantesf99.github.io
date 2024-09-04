@@ -49,11 +49,10 @@
         },
         "defaultColor": "Röd"
     },
-        {
+    {
         "id": "product6",
         "name": "360 Reghållare",
         "price": 129,
-        "images":"reg.webp"
-        },
+        "images": "reg.webp"
     }
 ]
