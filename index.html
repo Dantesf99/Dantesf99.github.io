@@ -133,6 +133,8 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 10px; /* Ensure consistent spacing */
+            width: 100%; /* Full width of the product container */
         }
 
         button:hover {
@@ -176,11 +178,10 @@
         function changeColor(productId, imageName, buttonId) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
-            const button = document.getElementById(buttonId);
-            button.dataset.color = button.dataset.color || 'Röd';
 
-            button.textContent = 'Lägg i kundvagn';
-            button.classList.remove('active');
+            const button = document.getElementById(buttonId);
+            const color = button.dataset.color || 'Röd';
+            updateButtonState(buttonId, button.dataset.productName, color);
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
@@ -195,12 +196,22 @@
             }
 
             localStorage.setItem('cart', JSON.stringify(cart));
-
-            let button = document.getElementById(buttonId);
-            button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x`;
-            button.classList.add('active');
-
+            updateButtonState(buttonId, productName, color);
             updateCartCount();
+        }
+
+        function updateButtonState(buttonId, productName, color) {
+            const button = document.getElementById(buttonId);
+            const cart = JSON.parse(localStorage.getItem('cart')) || [];
+            const product = cart.find(item => item.name === productName && item.color === color);
+
+            if (product) {
+                button.textContent = `I kundvagn: ${product.quantity}x`;
+                button.classList.add('active');
+            } else {
+                button.textContent = 'Lägg i kundvagn';
+                button.classList.remove('active');
+            }
         }
 
         function goToCart() {
@@ -218,8 +229,8 @@
             .then(products => {
                 let productList = document.querySelector('.product-list');
                 products.forEach(product => {
-                    let colorOptions = product.images && typeof product.images === 'object' 
-                        ? Object.keys(product.images).map(color => 
+                    let colorOptions = product.images && typeof product.images === 'object'
+                        ? Object.keys(product.images).map(color =>
                             `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn')">${color}</span>`
                         ).join(' ')
                         : '';
@@ -232,9 +243,10 @@
                         <h3>${product.name}</h3>
                         <p>${product.price} kr</p>
                         ${colorOptions ? `<div class="color-options">${colorOptions}</div>` : ''}
-                        <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
+                        <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
+                    updateButtonState(`${product.id}-btn`, product.name, product.defaultColor);
                 });
             })
             .catch(error => console.error('Error loading products:', error));
