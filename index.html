@@ -147,7 +147,7 @@
             font-size: 14px; /* Mindre textstorlek */
             text-align: center;
             box-sizing: border-box; /* Inkludera padding och kantlinje i elementets totala bredd och höjd */
-            margin-top: 15px; /* Utrymme ovanför knappen */
+            margin-top: 10px; /* Justerat utrymme ovanför knappen */
         }
         button:hover {
             background-color: #218838;
@@ -250,7 +250,7 @@
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
-                // Update button state for all products
+                // Uppdatera knappen tillstånd för alla produkter
                 products.forEach(product => updateButtonState(product.id, `${product.id}-btn`));
             })
             .catch(error => console.error('Error loading products:', error));
