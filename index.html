@@ -127,13 +127,16 @@
         }
 
         .product .color-selector .color-circle {
-            width: 20px;
-            height: 20px;
+            width: 30px; /* Större storlek för bättre synlighet */
+            height: 30px; /* Större storlek för bättre synlighet */
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #fff;
+            border: 2px solid #fff; /* Vit kantlinje för att tydligt avgränsa färgen */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            display: inline-block; /* Se till att de visas korrekt i rad */
+            margin: 2px; /* Liten marginal för att separera dem */
         }
+
 
         .product .color-selector .color-circle.red {
             background-color: red;
