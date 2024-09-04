@@ -120,14 +120,7 @@
             margin-bottom: 10px; /* Space between color options and button */
         }
         .color-option {
-            display: inline-block;
-            cursor: pointer;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            border: 2px solid transparent; /* Default border color */
-            box-shadow: 0 0 0 2px rgba(0,0,0,0.2); /* Subtle shadow for better visibility */
-            transition: border-color 0.3s, box-shadow 0.3s;
+            display: none; /* Default to hidden */
         }
         .color-option.red {
             background-color: red;
@@ -136,8 +129,16 @@
             background-color: blue;
         }
         .color-option.selected {
-            border-color: black; /* Border color for selected option */
-            box-shadow: 0 0 0 4px rgba(0,0,0,0.2); /* Larger shadow to highlight selection */
+            border: 2px solid black; /* Border color for selected option */
+        }
+        .color-option {
+            display: inline-block;
+            cursor: pointer;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            box-shadow: 0 0 0 2px rgba(0,0,0,0.2); /* Subtle shadow for better visibility */
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
         button {
             padding: 8px 16px;
@@ -264,7 +265,7 @@
                         </div>
                         <h3>${product.name}</h3>
                         <div class="color-options">
-                            ${product.images ? 
+                            ${product.images && typeof product.images === 'object' ? 
                                 Object.keys(product.images).map(color => 
                                     `<div class="color-option ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-button')"></div>`
                                 ).join('') : ''
