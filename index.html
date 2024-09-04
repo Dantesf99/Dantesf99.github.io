@@ -90,10 +90,9 @@
             margin: 20px auto;
             padding: 0 1.5cm;
             box-sizing: border-box;
-            background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            /* Ta bort bakgrundsfärg och border här */
+            background-color: transparent; 
+            border: none;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -190,21 +189,18 @@
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
-        // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
 
-            // Återställ knapptexten till "Lägg i kundvagn"
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
         }
 
-        // Funktion för att lägga till en produkt i kundvagnen
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Standard till 'Röd' om ingen färg är satt
+            const color = document.getElementById(buttonId).dataset.color || 'Röd';
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
@@ -223,19 +219,16 @@
             updateCartCount();
         }
 
-        // Funktion för att navigera till kundvagnen
         function goToCart() {
             window.location.href = "cart.html";
         }
 
-        // Funktion för att uppdatera antalet produkter i kundvagnen
         function updateCartCount() {
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
             let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
             document.getElementById('cart-count').textContent = totalItems;
         }
 
-        // Laddar produkterna från products.json och renderar dem dynamiskt
         fetch('products.json')
             .then(response => response.json())
             .then(products => {
