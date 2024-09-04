@@ -146,28 +146,37 @@
         }
         .color-option span {
             display: block;
+            font-size: 10px; /* Adjust text size */
         }
         .color-option:hover {
             box-shadow: 0 0 0 4px rgba(0,0,0,0.4); /* Enhanced shadow on hover */
         }
-        button {
+        .buy-button {
+            display: flex;
+            align-items: center;
             padding: 8px 16px;
             background-color: #28a745;
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: calc(100% - 20px); /* Slightly smaller than full width */
             border-radius: 50px; /* Rounded button */
+            width: calc(100% - 20px); /* Slightly smaller than full width */
             margin-top: auto; /* Pushes the button to the bottom */
             font-size: 14px; /* Smaller text size */
             text-align: center;
             box-sizing: border-box; /* Include padding and border in the element's total width and height */
         }
-        button:hover {
+        .buy-button .color-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .buy-button:hover {
             background-color: #218838;
         }
-        button.active {
+        .buy-button.active {
             background-color: #ffc107;
         }
     </style>
@@ -210,7 +219,8 @@
             // Update button state
             const button = document.getElementById(buttonId);
             button.dataset.color = imageName.split('/').pop().split('.')[0]; // Extract color name from image filename
-            button.textContent = `Lägg till i varukorg - ${button.dataset.price} kr`;
+            button.querySelector('.color-indicator').style.backgroundColor = button.dataset.color.toLowerCase();
+            button.textContent = `Köp - ${button.dataset.price} kr`;
             button.classList.remove('active');
         }
 
@@ -225,6 +235,7 @@
             }
             localStorage.setItem('cart', JSON.stringify(cart));
             let button = document.getElementById(buttonId);
+            button.querySelector('.color-indicator').style.backgroundColor = color.toLowerCase();
             button.textContent = `I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x - ${productPrice} kr`;
             button.classList.add('active');
             updateCartCount();
@@ -242,14 +253,15 @@
 
         function updateButtonState(productId, buttonId) {
             const button = document.getElementById(buttonId);
-            const color = button.dataset.color;
             const cart = JSON.parse(localStorage.getItem('cart')) || [];
-            const product = cart.find(item => item.name === button.dataset.productName && item.color === color);
-            if (product) {
-                button.textContent = `I kundvagn: ${product.quantity}x - ${product.price} kr`;
+            const productInCart = cart.find(item => item.name === button.dataset.productName);
+            if (productInCart) {
+                button.querySelector('.color-indicator').style.backgroundColor = button.dataset.color.toLowerCase();
+                button.textContent = `I kundvagn: ${productInCart.quantity}x - ${button.dataset.price} kr`;
                 button.classList.add('active');
             } else {
-                button.textContent = `Lägg till i varukorg - ${button.dataset.price} kr`;
+                button.querySelector('.color-indicator').style.backgroundColor = '';
+                button.textContent = `Köp - ${button.dataset.price} kr`;
                 button.classList.remove('active');
             }
         }
@@ -277,7 +289,10 @@
                                 ${colorOptions ? `<div class="color-options">${colorOptions}</div>` : ''}
                             </div>
                             <h3>${product.name}</h3>
-                            <button id="${product.id}-button" data-product-name="${product.name}" data-price="${product.price}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-button')">Lägg till i varukorg - ${product.price} kr</button>
+                            <button id="${product.id}-button" data-product-name="${product.name}" data-price="${product.price}" class="buy-button" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-button')">
+                                <div class="color-indicator"></div>
+                                Köp - ${product.price} kr
+                            </button>
                         </div>
                     `;
                     productList.insertAdjacentHTML('beforeend', productElement);
