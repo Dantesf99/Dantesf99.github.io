@@ -126,11 +126,14 @@
             margin-bottom: 15px; /* Space between color options and button */
             font-size: 14px;
             text-align: center;
+            display: flex; /* Align color options in a row */
+            flex-wrap: wrap; /* Allow wrapping to new lines */
+            justify-content: center; /* Center align color options */
+            gap: 5px; /* Space between color options */
         }
 
         .color-option {
             display: inline-block;
-            margin: 0 5px;
             cursor: pointer;
             border-radius: 50%;
             width: 20px;
@@ -138,11 +141,12 @@
             background-color: #ddd;
             text-align: center;
             line-height: 20px;
+            border: none; /* Remove border */
         }
 
         .color-option.selected {
-            border: 2px solid #333;
             background-color: #fff;
+            border: 2px solid #333; /* Optional: to indicate selection */
         }
 
         button {
