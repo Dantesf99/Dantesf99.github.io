@@ -7,7 +7,8 @@
             "Röd": "dominoröd.webp",
             "Blå": "dominoblå.webp"
         },
-        "defaultColor": "Röd"
+        "defaultColor": "Röd",
+        "colors": ["Röd", "Blå"]
     },
     {
         "id": "product2",
@@ -17,7 +18,8 @@
             "Röd": "renthalröd.webp",
             "Blå": "renthalblå.webp"
         },
-        "defaultColor": "Röd"
+        "defaultColor": "Röd",
+        "colors": ["Röd", "Blå"]
     },
     {
         "id": "product3",
@@ -27,7 +29,8 @@
             "Röd": "styrändröd.webp",
             "Blå": "styrändblå.webp"
         },
-        "defaultColor": "Röd"
+        "defaultColor": "Röd",
+        "colors": ["Röd", "Blå"]
     },
     {
         "id": "product4",
@@ -37,7 +40,8 @@
             "Röd": "fälgdekalerröd.jpg",
             "Blå": "fälgdekalerblå.jpg"
         },
-        "defaultColor": "Röd"
+        "defaultColor": "Röd",
+        "colors": ["Röd", "Blå"]
     },
     {
         "id": "product5",
@@ -47,22 +51,19 @@
             "Röd": "stylingskruvröd.webp",
             "Blå": "stylingskruvblå.webp"
         },
-        "defaultColor": "Röd"
+        "defaultColor": "Röd",
+        "colors": ["Röd", "Blå"]
     },
     {
         "id": "product7",
         "name": "360 Reghållare",
         "price": 129,
-        "images": {
-            "Default": "reg.webp"
-        }
+        "images": "reg.webp"
     },
     {
         "id": "product8",
         "name": "Underliggande Backspegel 2x",
         "price": 149,
-        "images": {
-            "Default": "backspegel.webp"
-        }
+        "images": "backspegel.webp"
     }
 ]
