@@ -16,7 +16,7 @@
         header {
             background-color: #333;
             color: white;
-            padding: 10px;
+            padding: 10px 20px;
             position: -webkit-sticky; /* För Safari */
             position: sticky;
             top: 0;
@@ -28,29 +28,14 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .menu-icon {
-            display: none; /* Dölj på större skärmar */
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
         .menu {
-            display: none;
-            position: absolute;
-            top: 60px;
-            left: 0;
-            background-color: #333;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            z-index: 1000;
+            display: flex;
+            gap: 20px;
         }
 
         .menu a {
             color: white;
             text-decoration: none;
-            display: block;
             padding: 10px;
         }
 
@@ -60,8 +45,7 @@
 
         header img {
             max-height: 40px;
-            margin: 0 auto;
-            display: block;
+            margin: 0;
         }
 
         .cart-icon {
@@ -70,6 +54,7 @@
             cursor: pointer;
             display: flex;
             align-items: center;
+            position: relative;
         }
 
         .cart-icon .badge {
@@ -95,7 +80,7 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            padding: 0 1rem;
+            padding: 0 2rem;
             box-sizing: border-box;
         }
 
@@ -107,8 +92,9 @@
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
             position: relative;
-            width: calc(50% - 20px); /* Anpassa bredden till 50% av containern */
+            width: calc(25% - 20px); /* Anpassa bredden till 25% av containern */
             max-width: 300px; /* Begränsa bredden för att passa på stora skärmar */
+            text-align: center;
         }
 
         .product img {
@@ -157,43 +143,15 @@
         button.active {
             background-color: #ffc107;
         }
-
-        @media (max-width: 768px) {
-            .menu-icon {
-                display: block;
-            }
-
-            .menu {
-                display: block;
-                position: static;
-                width: 100%;
-            }
-
-            header img {
-                max-height: 30px;
-            }
-
-            .cart-icon {
-                position: relative;
-                right: auto;
-                top: auto;
-            }
-
-            .product {
-                width: calc(100% - 20px); /* Anpassa bredden till 100% minus marginal */
-                max-width: none; /* Ta bort max-bredden för små skärmar */
-            }
-        }
     </style>
 </head>
 <body>
     <header>
-        <div class="menu-icon" onclick="toggleMenu()">☰</div>
-        <div class="menu" id="menu">
+        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
+        <div class="menu">
             <a href="index.html">Butik</a>
             <a href="cart.html">Kundvagn</a>
         </div>
-        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
         <div class="cart-icon" onclick="goToCart()">
             <span class="badge" id="cart-count">0</span>
             🛒
@@ -246,12 +204,6 @@
         // Funktion för att navigera till kundvagnen
         function goToCart() {
             window.location.href = "cart.html";
-        }
-
-        // Funktion för att visa/dölja menyn
-        function toggleMenu() {
-            let menu = document.getElementById('menu');
-            menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
         // Funktion för att uppdatera antalet produkter i kundvagnen
