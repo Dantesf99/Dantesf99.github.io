@@ -12,6 +12,7 @@
             background-color: #f4f4f4;
             box-sizing: border-box;
         }
+
         header {
             background-color: #333;
             color: white;
@@ -20,6 +21,7 @@
             position: relative;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
+
         .menu-icon {
             position: absolute;
             left: 20px;
@@ -28,6 +30,7 @@
             font-size: 24px;
             cursor: pointer;
         }
+
         .menu {
             display: none;
             position: absolute;
@@ -38,19 +41,23 @@
             border-radius: 5px;
             z-index: 1000;
         }
+
         .menu a {
             color: white;
             text-decoration: none;
             display: block;
             padding: 10px;
         }
+
         .menu a:hover {
             background-color: #555;
         }
+
         header img {
             max-height: 50px;
             vertical-align: middle;
         }
+
         .cart-icon {
             position: absolute;
             right: 20px;
@@ -59,6 +66,7 @@
             font-size: 24px;
             cursor: pointer;
         }
+
         .cart-icon .badge {
             background-color: #dc3545;
             color: white;
@@ -72,10 +80,12 @@
             line-height: 20px;
             text-align: center;
         }
+
         .section-header {
             text-align: center;
             margin: 20px 0;
         }
+
         .product-list {
             margin: 20px auto;
             padding: 0 1.5cm;
@@ -88,6 +98,7 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+
         .product {
             background-color: white;
             border: 1px solid #ccc;
@@ -100,11 +111,13 @@
             max-width: 300px;
             text-align: center;
         }
+
         .product img {
             max-width: 100%;
             height: auto;
             display: block;
         }
+
         .product .color-selector {
             position: absolute;
             bottom: 10px;
@@ -112,41 +125,100 @@
             display: flex;
             gap: 5px;
         }
+
         .product .color-selector .color-circle {
             width: 20px;
             height: 20px;
             border-radius: 50%;
             cursor: pointer;
             border: 2px solid #fff;
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
         }
 
         .product .color-selector .color-circle.red {
-@@ -190,21 +190,18 @@ <h2>Våra produkter</h2>
+            background-color: red;
+        }
+
+        .product .color-selector .color-circle.blue {
+            background-color: blue;
+        }
+
+        button {
+            padding: 8px 16px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #218838;
+        }
+
+        button.active {
+            background-color: #ffc107;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-icon" onclick="toggleMenu()">☰</div>
+        <div class="menu" id="menu">
+            <a href="index.html">Butik</a>
+            <a href="cart.html">Kundvagn</a>
+        </div>
+        <img src="50SHOPLOGO.png" alt="50SHOP Logo">
+        <div class="cart-icon" onclick="goToCart()">
+            <span class="badge" id="cart-count">0</span>
+            🛒
+        </div>
+    </header>
+
+    <section id="home">
+        <div class="section-header">
+            <h2>Våra produkter</h2>
+        </div>
+        <div class="product-list">
+            <!-- Produkter kommer att laddas här dynamiskt -->
+        </div>
+    </section>
+
+    <script>
+        function toggleMenu() {
+            let menu = document.getElementById('menu');
             menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
         }
 
         // Funktion för att ändra produktens färg och bild
         function changeColor(productId, imageName, buttonId, color) {
-            const imgElement = document.querySelector(`#${productId} .product-image`);
+            const imgElement = document.querySelector(#${productId} .product-image);
             imgElement.src = imageName;
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
 
-            // Återställ knapptexten till "Lägg i kundvagn"
+            // Reset button text to "Lägg i kundvagn"
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
         }
 
         // Funktion för att lägga till en produkt i kundvagnen
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Standard till 'Röd' om ingen färg är satt
-            const color = document.getElementById(buttonId).dataset.color || 'Röd';
+            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Default to 'Röd' if no color is set
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
-@@ -223,19 +220,16 @@ <h2>Våra produkter</h2>
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ name: productName, color: color, price: productPrice, quantity: 1 });
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+
+            let button = document.getElementById(buttonId);
+            button.textContent = I kundvagn: ${existingProduct ? existingProduct.quantity : 1}x;
+            button.classList.add('active');
+
             updateCartCount();
         }
 
@@ -166,25 +238,27 @@
         fetch('products.json')
             .then(response => response.json())
             .then(products => {
-@@ -246,11 +240,11 @@ <h2>Våra produkter</h2>
+                let productList = document.querySelector('.product-list');
+                products.forEach(product => {
+                    let productElement = 
+                    <div class="product" id="${product.id}">
                         <div class="image-container">
                             <img src="${product.images[product.defaultColor]}" class="product-image">
                         </div>
-                        <h3>${product.name}</h3>
                         <h3>${product.name} Röd, Blå</h3>
                         <p>${product.price} kr</p>
                         <div class="color-selector">
                             ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle" style="background-color: ${color.toLowerCase()};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
-                            `<div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
+                            <div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>
                             ).join('')}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
-                    </div>`;
+                    </div>;
                     productList.insertAdjacentHTML('beforeend', productElement);
                 });
             })
             .catch(error => console.error('Error loading products:', error));
+
         window.onload = function() {
             updateCartCount();
         }
