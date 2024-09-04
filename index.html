@@ -191,6 +191,7 @@
             const imgElement = document.querySelector(`#${productId} .product-image`);
             imgElement.src = imageName;
 
+            // Update the color options' selected state
             const colorOptions = document.querySelectorAll(`#${productId} .color-option`);
             colorOptions.forEach(option => {
                 option.classList.remove('selected');
@@ -258,7 +259,7 @@
                 products.forEach(product => {
                     let colorOptions = product.images && typeof product.images === 'object'
                         ? Object.keys(product.images).map(color =>
-                            `<span class="color-option" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
+                            `<span class="color-option ${color === product.defaultColor ? 'selected' : ''}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')">${color}</span>`
                         ).join(' ')
                         : '';
 
@@ -273,8 +274,9 @@
                         <button id="${product.id}-btn" data-product-name="${product.name}" data-color="${product.defaultColor}" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
                     </div>`;
                     productList.insertAdjacentHTML('beforeend', productElement);
-                    updateButtonState(product.id, `${product.id}-btn`);
                 });
+                // Update button state for all products
+                products.forEach(product => updateButtonState(product.id, `${product.id}-btn`));
             })
             .catch(error => console.error('Error loading products:', error));
 
