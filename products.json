@@ -8,7 +8,8 @@
             "Blå": "dominoblå.webp"
         },
         "defaultColor": "Röd",
-        "colors": ["Röd", "Blå"]
+        "colors": ["Röd", "Blå"],
+        "hasColors": true
     },
     {
         "id": "product2",
@@ -19,7 +20,8 @@
             "Blå": "renthalblå.webp"
         },
         "defaultColor": "Röd",
-        "colors": ["Röd", "Blå"]
+        "colors": ["Röd", "Blå"],
+        "hasColors": true
     },
     {
         "id": "product3",
@@ -30,7 +32,8 @@
             "Blå": "styrändblå.webp"
         },
         "defaultColor": "Röd",
-        "colors": ["Röd", "Blå"]
+        "colors": ["Röd", "Blå"],
+        "hasColors": true
     },
     {
         "id": "product4",
@@ -41,7 +44,8 @@
             "Blå": "fälgdekalerblå.jpg"
         },
         "defaultColor": "Röd",
-        "colors": ["Röd", "Blå"]
+        "colors": ["Röd", "Blå"],
+        "hasColors": true
     },
     {
         "id": "product5",
@@ -52,18 +56,21 @@
             "Blå": "stylingskruvblå.webp"
         },
         "defaultColor": "Röd",
-        "colors": ["Röd", "Blå"]
+        "colors": ["Röd", "Blå"],
+        "hasColors": true
     },
     {
         "id": "product7",
         "name": "360 Reghållare",
         "price": 129,
-        "images": "reg.webp"
+        "images": "reg.webp",
+        "hasColors": false
     },
     {
         "id": "product8",
         "name": "Backspegel 2pack",
         "price": 149,
-        "images": "backspegel.webp"
+        "images": "backspegel.webp",
+        "hasColors": false
     }
 ]
