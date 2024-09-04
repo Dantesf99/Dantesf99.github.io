@@ -106,9 +106,6 @@
             width: calc(25% - 20px);
             max-width: 300px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            height: 400px; /* Fixed height for consistency */
         }
 
         .product img {
@@ -118,9 +115,9 @@
         }
 
         .color-options {
-            margin-top: auto; /* Pushes color options to the bottom */
+            margin-bottom: 10px;
+            font-size: 14px;
             text-align: center;
-            padding: 10px 0;
         }
 
         .color-option {
@@ -133,12 +130,11 @@
             background-color: #ddd;
             text-align: center;
             line-height: 20px;
-            border: none; /* Hide circle border */
         }
 
         .color-option.selected {
-            background-color: #333;
-            color: #fff;
+            border: 2px solid #333;
+            background-color: #fff;
         }
 
         button {
@@ -148,7 +144,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: auto; /* Pushes the button to the bottom */
+            margin-top: 10px; /* Ensure consistent spacing */
             width: 100%; /* Full width of the product container */
             border-radius: 50px; /* Rounded button */
         }
