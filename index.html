@@ -90,8 +90,6 @@
             margin: 20px auto;
             padding: 0 1.5cm;
             box-sizing: border-box;
-            background-color: transparent; 
-            border: none;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
@@ -129,8 +127,17 @@
             height: 20px;
             border-radius: 50%;
             cursor: pointer;
-            border: 2px solid #fff; /* Vit kantlinje */
-            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3); /* Skugga för 3D-effekt */
+            border: 2px solid #fff;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+            display: inline-block;
+        }
+
+        .product .color-selector .color-circle.red {
+            background-color: red;
+        }
+
+        .product .color-selector .color-circle.blue {
+            background-color: blue;
         }
 
         button {
@@ -186,12 +193,13 @@
             const button = document.getElementById(buttonId);
             button.dataset.color = color;
 
+            // Update button text and remove active class
             button.textContent = 'Lägg i kundvagn';
             button.classList.remove('active');
         }
 
         function handleAddToCart(productName, productPrice, buttonId) {
-            const color = document.getElementById(buttonId).dataset.color || 'Röd';
+            const color = document.getElementById(buttonId).dataset.color || 'Röd'; // Standard till 'Röd' om ingen färg är satt
             let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
             let existingProduct = cart.find(item => item.name === productName && item.color === color);
@@ -234,7 +242,7 @@
                         <p>${product.price} kr</p>
                         <div class="color-selector">
                             ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle" style="background-color: ${color};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
+                            `<div class="color-circle ${color.toLowerCase()}" style="background-color: ${color.toLowerCase()};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
                             ).join('')}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
