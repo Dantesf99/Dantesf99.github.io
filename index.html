@@ -250,7 +250,7 @@
                         <p>${product.price} kr</p>
                         <div class="color-selector">
                             ${Object.keys(product.images).map(color => 
-                            `<div class="color-circle ${color.toLowerCase()}" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
+                            `<div class="color-circle" style="background-color: ${color.toLowerCase()};" onclick="changeColor('${product.id}', '${product.images[color]}', '${product.id}-btn', '${color}')"></div>`
                             ).join('')}
                         </div>
                         <button id="${product.id}-btn" onclick="handleAddToCart('${product.name}', ${product.price}, '${product.id}-btn')">Lägg i kundvagn</button>
