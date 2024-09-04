@@ -102,10 +102,12 @@
             margin: 10px;
             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
             box-sizing: border-box;
-            position: relative;
+            display: flex;
+            flex-direction: column;
             width: calc(25% - 20px);
             max-width: 300px;
             text-align: center;
+            height: 400px; /* Fixed height for consistency */
         }
 
         .product img {
@@ -144,7 +146,7 @@
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 10px; /* Ensure consistent spacing */
+            margin-top: auto; /* Pushes the button to the bottom */
             width: 100%; /* Full width of the product container */
             border-radius: 50px; /* Rounded button */
         }
